@@ -122,13 +122,15 @@ public class MainActivity extends Activity  implements
             
             mMediaPlayer.setDisplay(holder);
             
-            LogMsg("before prepare");
-            mMediaPlayer.prepare();
-            LogMsg("prepare done");
+            LogMsg("before prepareAsync");
+            //mMediaPlayer.prepare();
+            mMediaPlayer.prepareAsync(); //change to async mode
+            LogMsg("after prepareAsync");
             
+            mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnBufferingUpdateListener(this);
             mMediaPlayer.setOnCompletionListener(this);
-            mMediaPlayer.setOnPreparedListener(this);
+            
             mMediaPlayer.setOnVideoSizeChangedListener(this);
             mMediaPlayer.setOnErrorListener(this);
             mMediaPlayer.setOnInfoListener(this);
@@ -227,7 +229,7 @@ public class MainActivity extends Activity  implements
     }
 
     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-    	LogMsg("onVideoSizeChanged called");
+    	LogMsg("onVideoSizeChanged called,w="+width+",h="+height);
         if (width == 0 || height == 0) {
         	LogMsg("invalid video width(" + width + ") or height(" + height + ")");
             return;
@@ -241,7 +243,7 @@ public class MainActivity extends Activity  implements
     }
 
     public void onPrepared(MediaPlayer mediaplayer) {
-    	LogMsg("onPrepared called");
+    	LogMsg("Prepared OK");
         mIsVideoReadyToBePlayed = true;
         if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
             startVideoPlayback();
